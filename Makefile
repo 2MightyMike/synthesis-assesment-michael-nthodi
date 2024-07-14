@@ -4,6 +4,7 @@
 BUCKET_NAME=synthesis-bucket-by-michael-nthodi
 REGION=us-west-1
 TERRAFORM_VERSION ?= 1.5.0
+TF_DIR ?= terraform
 
 # Install Terraform
 install:
@@ -25,23 +26,20 @@ all: init plan apply
 # Initialize Terraform
 .PHONY: init
 init:
-	@(cd terraform/s3)
-	ls
-	terraform init
+	cd $(TF_DIR) && terraform init
 
 # Plan the Terraform deployment
 .PHONY: plan
 plan:
-	cd terraform
-	terraform plan -var "bucket_name=$(BUCKET_NAME)" -var "region=$(REGION)"
+	cd $(TF_DIR) && terraform plan -var "bucket_name=$(BUCKET_NAME)" -var "region=$(REGION)"
 
 # Apply the Terraform deployment
 .PHONY: apply
 apply:
-	terraform apply -var "bucket_name=$(BUCKET_NAME)" -var "region=$(REGION)" -auto-approve
+	cd $(TF_DIR) && terraform apply -var "bucket_name=$(BUCKET_NAME)" -var "region=$(REGION)" -auto-approve
 
 # Destroy the Terraform-managed infrastructure
 .PHONY: destroy
 destroy:
-	terraform destroy -var "bucket_name=$(BUCKET_NAME)" -var "region=$(REGION)" -auto-approve
+	cd $(TF_DIR) &&  terraform destroy -var "bucket_name=$(BUCKET_NAME)" -var "region=$(REGION)" -auto-approve
 
