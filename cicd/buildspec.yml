@@ -1,0 +1,88 @@
+version: 0.2
+
+stages:
+  - name: Source
+    actions:
+      - name: Source
+        actionTypeId:
+          category: Source
+          owner: ThirdParty
+          provider: GitHub
+          version: 1
+        outputArtifacts:
+          - name: SourceArtifact
+        configuration:
+          RepositoryName: my-iac-repo
+          BranchName: main
+          OAuthToken: <oauth-token>
+
+  - name: Build
+    actions:
+      - name: Build
+        actionTypeId:
+          category: Build
+          owner: AWS
+          provider: CodeBuild
+          version: 1
+        inputArtifacts:
+          - name: SourceArtifact
+        outputArtifacts:
+          - name: BuildArtifact
+        configuration:
+          ProjectName: my-iac-build-project
+
+  - name: Test
+    actions:
+      - name: Test
+        actionTypeId:
+          category: Build
+          owner: AWS
+          provider: CodeBuild
+          version: 1
+        inputArtifacts:
+          - name: BuildArtifact
+        outputArtifacts:
+          - name: TestArtifact
+        configuration:
+          ProjectName: my-iac-test-project
+
+  - name: Deploy
+    actions:
+      - name: Deploy
+        actionTypeId:
+          category: Build
+          owner: AWS
+          provider: CodeBuild
+          version: 1
+        inputArtifacts:
+          - name: TestArtifact
+        outputArtifacts:
+          - name: DeployArtifact
+        configuration:
+          ProjectName: my-iac-deploy-project
+
+  - name: Approval
+    actions:
+      - name: Approval
+        actionTypeId:
+          category: Approval
+          owner: AWS
+          provider: Manual
+          version: 1
+        configuration:
+          CustomData: 'Please approve the deployment to production'
+
+  - name: Production
+    actions:
+      - name: Production
+        actionTypeId:
+          category: Build
+          owner: AWS
+          provider: CodeBuild
+          version: 1
+        inputArtifacts:
+          - name: DeployArtifact
+        outputArtifacts:
+          - name: ProductionArtifact
+        configuration:
+          ProjectName: my-iac-production-project
