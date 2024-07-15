@@ -6,7 +6,7 @@ This project contains Terraform configurations to deploy a version enabled S3 bu
 
 ## Prerequisites
 
-- [Terraform](https://www.terraform.io/downloads.html) v1.0.0 or later
+- [Terraform](https://www.terraform.io/downloads.html) v1.5.0 or later
 - AWS credentials configured (via `aws configure` or environment variables)
 
 ## Modules in this repository
