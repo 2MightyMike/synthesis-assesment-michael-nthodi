@@ -12,7 +12,7 @@ resource "aws_codepipeline" "permission_sets_pipeline" {
   tags     = local.tags
 
   artifact_store {
-    location = aws_s3_bucket.artifacts.id
+    location = aws_s3_bucket.synthesis_artificats_bucket.id
     type     = "S3"
   }
 
