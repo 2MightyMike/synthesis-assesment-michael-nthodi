@@ -37,6 +37,24 @@ resource "aws_codepipeline" "permission_sets_pipeline" {
   }
 
   stage {
+    name = "Test"
+
+    action {
+      name             = "Test"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      input_artifacts  = ["source_output"]
+      output_artifacts = ["test_output"]
+      version          = "1"
+
+      configuration = {
+        ProjectName = aws_codebuild_project.checkov_test.name
+      }
+    }
+  }
+
+  stage {
     name = "Plan"
 
     action {
@@ -50,7 +68,7 @@ resource "aws_codepipeline" "permission_sets_pipeline" {
       version          = "1"
 
       configuration = {
-        ProjectName          = aws_codebuild_project.terraform_apply.name
+        ProjectName          = aws_codebuild_project.terraform_plan.name
         EnvironmentVariables = jsonencode([
           {
             name  = "PIPELINE_EXECUTION_ID"
