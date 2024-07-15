@@ -1,11 +1,3 @@
-locals {
-  app_name = "synthesis-cicd"
-  tags ={
-    Name        = var.bucket_name
-    Environment = "development"
-  }
-  branchName    = "main"
-}
 resource "aws_codepipeline" "permission_sets_pipeline" {
   name     = "${local.app_name}-pipeline"
   role_arn = aws_iam_role.codepipeline.arn

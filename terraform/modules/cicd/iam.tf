@@ -1,12 +1,3 @@
-locals {
-  app_name = "synthesis-cicd"
-  tags ={
-    Name        = var.bucket_name
-    Environment = "development"
-  }
-  branchName    = "main"
-}
-
 resource "aws_iam_role" "codepipeline" {
   description = "CodePipeline Service Role - ${local.app_name}"
   tags        = local.tags
@@ -125,22 +116,6 @@ data "aws_iam_policy_document" "codebuild" {
 
     resources = [
       "*",
-    ]
-  }
-
-  statement {
-    actions = [
-      "dynamodb:GetItem",
-      "dynamodb:PutItem",
-      "dynamodb:DeleteItem",
-      "dynamodb:DescribeTable",
-      "dynamodb:DescribeContinuousBackups",
-      "dynamodb:DescribeTimeToLive",
-      "dynamodb:ListTagsOfResource",
-    ]
-
-    resources = [
-      data.aws_ssm_parameter.lock_table_arn.value,
     ]
   }
 

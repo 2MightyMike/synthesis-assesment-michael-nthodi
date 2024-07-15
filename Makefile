@@ -31,7 +31,7 @@ init:
 # Plan the Terraform deployment
 .PHONY: plan
 plan:
-	cd $(TF_DIR) && terraform plan -var "bucket_name=$(BUCKET_NAME)" -var "region=$(REGION)"
+	cd $(TF_DIR) && terraform plan -out=tfplan -var "bucket_name=$(BUCKET_NAME)" -var "region=$(REGION)"
 
 # Apply the Terraform deployment
 .PHONY: apply
